@@ -28,7 +28,7 @@ def get_vin():
 
     vin = soup.find("select", class_="form-control").text
 
-    return vin
+    print(vin)
 
 
 def get_data():
