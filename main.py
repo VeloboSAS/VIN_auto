@@ -6,7 +6,7 @@ from selenium import webdriver
 
 
 def get_vin():
-    number = input("Введите гос.номер авто: ")
+    number = input("Enter the car number: ")
     time.sleep(3)
 
     driver = webdriver.Chrome(
