@@ -4,15 +4,13 @@ import json
 import time
 from selenium import webdriver
 
-# num = 'Х264КО76'
-
 
 def get_vin():
     number = input("Введите гос.номер авто: ")
     time.sleep(3)
 
     driver = webdriver.Chrome(
-        executable_path="C:\\Users\\vovik\\PycharmProjects\\test\\Sel\\ChromeDriver\\chromedriver.exe")
+        executable_path="Path")
 
     driver.get(url='https://vin01.ru/')
     time.sleep(2)
