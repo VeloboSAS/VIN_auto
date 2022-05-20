@@ -76,6 +76,8 @@ def get_history(vin):
     with open('data.json', "w", encoding="utf-8") as file:
         json.dump(data, file, indent=4, ensure_ascii=False)
 
+def get_pdd():
+    pass
 
 def main():
     vin = get_vin()
