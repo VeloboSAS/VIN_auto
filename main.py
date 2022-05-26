@@ -155,10 +155,43 @@ def get_dtp(vin):
         json.dump(data, file, indent=4, ensure_ascii=False)
 
 
+# Verification of being wanted
+def get_search(vin):
+    driver = webdriver.Chrome(executable_path=
+                              "C:\\Users\\vovik\\PycharmProjects\\test\\Sel\\ChromeDriver\\chromedriver.exe")
+
+    driver.get('https://xn--90adear.xn--p1ai/check/auto')
+    time.sleep(30)
+
+    elem = driver.find_element_by_id('checkAutoVIN')
+    elem.send_keys(vin)
+    driver.find_element_by_xpath("//a[@class='checker'][@data-type='wanted']").click()
+
+    try:
+        WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.CLASS_NAME, 'close_modal_window'))).click()
+    except TimeoutException:
+        print("TimeoutException")
+
+    html = driver.page_source
+    soup = BeautifulSoup(html, "lxml")
+
+    result = soup.find("div", id="checkAutoWanted").find_all("p")[1].text
+
+    data = {
+        'Проверка нахождения в розыске': result
+    }
+
+    with open('data_search.json', "w", encoding="utf-8") as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
+
+
 def main():
+    # vin = "X9FMXXEEBMCG01011"
+    # vin = "XUFTA69EJEN029234"
     vin = get_vin()
     get_history(vin)
     get_dtp(vin)
+    get_search(vin)
 
 
 if __name__ == '__main__':
