@@ -335,8 +335,8 @@ def get_info(vin):
 
 def main():
     # vin = "X9FMXXEEBMCG01011"
-    # vin = "XUFTA69EJEN029234"
-    vin = get_vin()
+    vin = "XUFTA69EJEN029234"
+    # vin = get_vin()
     # get_history(vin)
     # get_dtp(vin)
     # get_search(vin)
