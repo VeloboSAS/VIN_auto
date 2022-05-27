@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-
+import config
 
 # Getting a car's VIN by number
 def get_vin():
@@ -98,42 +98,15 @@ def get_info_gibdd(vin):
         cards = soup.find("ul", class_="aiusdtp-list").find_all("li")[::17]
 
         for i in cards:
-            try:
-                title = i.find("p", class_="ul-title").text.strip()
-            except:
-                title = ''
-            try:
-                data_time = i.find_all("li")[0].find("span", class_="field").text.strip()
-            except:
-                data_time = ""
-            try:
-                type_dtp = i.find_all("li")[1].find("span", class_="field").text.strip()
-            except:
-                type_dtp = ''
-            try:
-                region = i.find_all("li")[2].find("span", class_="field").text.strip()
-            except:
-                region = ''
-            try:
-                place = i.find_all("li")[3].find("span", class_="field").text.strip()
-            except:
-                place = ''
-            try:
-                model = i.find_all("li")[4].find("span", class_="field").text.strip()
-            except:
-                model = ''
-            try:
-                year = i.find_all("li")[5].find("span", class_="field").text.strip()
-            except:
-                year = ''
-            try:
-                owner = i.find_all("li")[6].find("span", class_="field").text.strip()
-            except:
-                owner = ''
-            try:
-                number = i.find_all("li")[7].find("span", class_="field").text.strip()
-            except:
-                number = ''
+            title = i.find("p", class_="ul-title").text.strip()
+            data_time = i.find_all("li")[0].find("span", class_="field").text.strip()
+            type_dtp = i.find_all("li")[1].find("span", class_="field").text.strip()
+            region = i.find_all("li")[2].find("span", class_="field").text.strip()
+            place = i.find_all("li")[3].find("span", class_="field").text.strip()
+            model = i.find_all("li")[4].find("span", class_="field").text.strip()
+            year = i.find_all("li")[5].find("span", class_="field").text.strip()
+            owner = i.find_all("li")[6].find("span", class_="field").text.strip()
+            number = i.find_all("li")[7].find("span", class_="field").text.strip()
 
             data.append({
                 "Информация о происшествии": title,
@@ -176,11 +149,126 @@ def get_info_gibdd(vin):
         print("The check failed with an error on the server side")
 
 
+def get_info_gos_uslugi(vin):
+    driver = webdriver.Chrome(
+        executable_path="C:\\Users\\vovik\\PycharmProjects\\test\\Sel\\ChromeDriver\\chromedriver.exe")  # enter the path to the file chromedriver.exe
+
+    driver.get('https://www.gosuslugi.ru/600308/1/form')
+    time.sleep(10)
+    # driver.find_element_by_class_name("button-plain").click()
+    # time.sleep(2)
+    username = driver.find_element_by_id("login")
+    password = driver.find_element_by_id("password")
+
+    username.send_keys(config.login)
+    time.sleep(3)
+    password.send_keys(config.password)
+    time.sleep(6)
+
+    driver.find_element_by_xpath("//button[@class='plain-button wide']").click()
+    time.sleep(4)
+    driver.find_element_by_xpath("//button[@class='button font-']").click()
+    time.sleep(5)
+
+    driver.find_element_by_xpath("//input[@name='q1'][@type='text']").send_keys(vin)
+    time.sleep(7)
+    driver.find_element_by_xpath("//button[@class='button font-']").click()
+    time.sleep(3)
+    html = driver.page_source
+
+    # with open('index.html', 'w', encoding='utf-8') as f:
+    #     f.write(html)
+    #
+    # with open("index.html", encoding='utf-8') as file:
+    #     html = file.read()
+
+    data = []
+    soup = BeautifulSoup(html, "lxml")
+    number = soup.find_all("div", class_="car-info-group")[0].find_all('div', class_="info-list-value")[0].text.strip()
+    status = soup.find_all("div", class_="car-info-group")[0].find_all('div', class_="info-list-value")[1].text.strip()
+    division = soup.find_all("div", class_="car-info-group")[0].find_all('div', class_="info-list-value")[2].text.strip()
+    last = soup.find_all("div", class_="car-info-group")[0].find_all('div', class_="info-list-value")[3].text.strip()
+    lizing = soup.find_all("div", class_="car-info-group")[0].find_all('div', class_="info-list-value")[4].text.strip()
+    model = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[0].text.strip()
+    year = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[1].text.strip()
+    maker = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[2].text.strip()
+    VIN = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[3].text.strip()
+    VIN2 = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[4].text.strip()
+    frame = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[5].text.strip()
+    body = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[6].text.strip()
+    color = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[7].text.strip()
+    volume = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[8].text.strip()
+    engine = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[9].text.strip()
+    fuel = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[10].text.strip()
+    power = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[11].text.strip()
+    type = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[12].text.strip()
+    category = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[13].text.strip()
+    category_union = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[14].text.strip()
+    ecology_class = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[15].text.strip()
+    wheel = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[16].text.strip()
+    transmission = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[17].text.strip()
+    privod = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[18].text.strip()
+    seria = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[19].text.strip()
+    utilisation = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[20].text.strip()
+    declar = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[21].text.strip()
+    limit = soup.find_all("div", class_="car-info-group")[1].find_all('div', class_="info-list-value")[21].text.strip()
+    owner_cards = soup.find_all("div", class_="car-info-group")[2].find_all('div', class_="info-list-group-item")
+    owner_list = []
+    for oc in owner_cards:
+        owner = oc.find("div", class_="info-list-subtitle").text.strip()
+        period = oc.find("div", class_="info-list-value").text.strip()
+        owner_list.append(f"Период: {period}, Владелец: {owner}")
+    search = soup.find_all("div", class_="car-info-group")[3].find_all('div', class_="info-list-value")[0].text.strip()
+    limit_reg = soup.find_all("div", class_="car-info-group")[3].find_all('div', class_="info-list-value")[1].text.strip()
+    search_pts = soup.find_all("div", class_="car-info-group")[3].find("div", class_="info-list-group-item").find("div", class_="info-list-value").text.strip()
+    zalog = soup.find_all("div", class_="car-info-group")[4].find('div', class_="info-list-value").text.strip()
+
+    data.append({
+        'Номер реестровой записи': number,
+        'Статус в ГИБДД': status,
+        'Наименование подразделения': division,
+        'Последняя операция': last,
+        'В лизинге': lizing,
+        'Марка и модель': model,
+        'Год выпуска': year,
+        'Изготовитель': maker,
+        'Идентификационный номер (VIN)': VIN,
+        'Идентификационный номер (VIN2)': VIN2,
+        'Номер шасси (рамы)': frame,
+        'Номер кузова (кабины)': body,
+        'Цвет кузова (кабины)': color,
+        'Рабочий объём (куб.см)': volume,
+        'Модель двигателя': engine,
+        'Тип топлива': fuel,
+        'Мощность (кВТ/л.с.)': power,
+        'Тип транспортного средства': type,
+        'Категория': category,
+        'Категория (Там. Союз)': category_union,
+        'Экологический класс': ecology_class,
+        'Положение руля': wheel,
+        'Тип коробки передач': transmission,
+        'Тип привода': privod,
+        'Серия и номер одобрения типа': seria,
+        'Статус утилизационного сбора': utilisation,
+        'Номер таможенной декларации (ТД, ТПО)': declar,
+        'Таможенные ограничения': limit,
+        'История регистрационных действий': owner_list,
+        'В розыске': search,
+        'Ограничения на регистрацию': limit_reg,
+        'В розыске ПТС': search_pts,
+        'Находится в залоге': zalog
+    })
+
+    with open('data.json', "w", encoding="utf-8") as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
+
+
 def main():
     # vin = get_vin()
-    # vin = "XW8ZZZ61ZBG015773"
-    vin = "XW8ZZZ7PZDG007011"
-    get_info_gibdd(vin)
+    vin = "XW8ZZZ61ZBG015773"
+    # vin = "XW8ZZZ7PZDG007011"
+    get_info_gos_uslugi(vin)
+    # get_info_gibdd(vin)
 
 
 if __name__ == '__main__':
