@@ -33,14 +33,16 @@ def get_vin():
 
 
 # getting information about the registration history, traffic accidents and being wanted
-def get_info(vin):
-    driver = webdriver.Chrome(executable_path="path")   # enter the path to the file chromedriver.exe
+def get_info_gibdd(vin):
+    driver = webdriver.Chrome(executable_path="C:\\Users\\vovik\\PycharmProjects\\test\\Sel\\ChromeDriver\\chromedriver.exe")   # enter the path to the file chromedriver.exe
 
     driver.get('https://xn--90adear.xn--p1ai/check/auto')
     time.sleep(30)
 
     elem = driver.find_element_by_id('checkAutoVIN')
     elem.send_keys(vin)
+
+    data = []
     try:
         task = "the registration history"
         driver.find_element_by_class_name('checker').click()
@@ -68,18 +70,14 @@ def get_info(vin):
             owner = oc.find('span', class_="simplePersonType").text
             owner_list.append(f"С: {period_from}, По: {period_to}, Владелец: {owner})")
 
-        data = {
+        data.append({
             'Модель': model,
             'Год выпуска': year,
             'Цвет': color,
             'Рабочий объем(см³)': volume,
             'Мощность (кВт/л.с.)': power,
             'Периоды владения тс': owner_list,
-        }
-
-        with open('data.json', "a", encoding="utf-8") as file:
-            json.dump(data, file, indent=4, ensure_ascii=False)
-            file.write(',\n')
+        })
 
         print(f'[+] Processed: {task} is done')
     except:
@@ -137,7 +135,7 @@ def get_info(vin):
             except:
                 number = ''
 
-            data = {
+            data.append({
                 "Информация о происшествии": title,
                 "Дата и время происшествия:": data_time,
                 "Тип происшествия:": type_dtp,
@@ -147,10 +145,7 @@ def get_info(vin):
                 "Год выпуска ТС:": year,
                 "ОПФ собственника:": owner,
                 "Номер ТС/из всего ТС в ДТП:": number,
-            }
-            with open('data.json', "a", encoding="utf-8") as file:
-                json.dump(data, file, indent=4, ensure_ascii=False)
-                file.write(',\n')
+            })
 
         print(f'[+] Processed: {task} is done')
     except:
@@ -170,11 +165,11 @@ def get_info(vin):
 
         result = soup.find("div", id="checkAutoWanted").find_all("p")[1].text
 
-        data = {
+        data.append({
             'Проверка нахождения в розыске': result
-        }
+        })
 
-        with open('data.json', "a", encoding="utf-8") as file:
+        with open('data.json', "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4, ensure_ascii=False)
         print(f'[+] Processed: {task} is done')
     except:
@@ -182,8 +177,10 @@ def get_info(vin):
 
 
 def main():
-    vin = get_vin()
-    get_info(vin)
+    # vin = get_vin()
+    # vin = "XW8ZZZ61ZBG015773"
+    vin = "XW8ZZZ7PZDG007011"
+    get_info_gibdd(vin)
 
 
 if __name__ == '__main__':
