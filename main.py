@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import config
 
+
 # Getting a car's VIN by number
 def get_vin():
     number = input("Enter the car number: ")
@@ -34,9 +35,9 @@ def get_vin():
 
 # getting information about the registration history, traffic accidents and being wanted
 def get_info_gibdd(vin):
-    driver = webdriver.Chrome(executable_path="C:\\Users\\vovik\\PycharmProjects\\test\\Sel\\ChromeDriver\\chromedriver.exe")   # enter the path to the file chromedriver.exe
+    driver = webdriver.Chrome(executable_path="path")   # enter the path to the file chromedriver.exe
 
-    driver.get('https://xn--90adear.xn--p1ai/check/auto')
+    driver.get('https://xn--90adear.xn--p1ai/check/auto')  # https://гибдд.рф/check/auto
     time.sleep(30)
 
     elem = driver.find_element_by_id('checkAutoVIN')
@@ -149,14 +150,14 @@ def get_info_gibdd(vin):
         print("The check failed with an error on the server side")
 
 
+# getting information about Technical data, Number of owners, Being wanted, Availability of restrictions, Being pledged
 def get_info_gos_uslugi(vin):
     driver = webdriver.Chrome(
-        executable_path="C:\\Users\\vovik\\PycharmProjects\\test\\Sel\\ChromeDriver\\chromedriver.exe")  # enter the path to the file chromedriver.exe
+        executable_path="path")  # enter the path to the file chromedriver.exe
 
-    driver.get('https://www.gosuslugi.ru/600308/1/form')
+    driver.get('https://www.gosuslugi.ru/600308/1/form')   # https://www.gosuslugi.ru/
     time.sleep(10)
-    # driver.find_element_by_class_name("button-plain").click()
-    # time.sleep(2)
+
     username = driver.find_element_by_id("login")
     password = driver.find_element_by_id("password")
 
@@ -175,12 +176,6 @@ def get_info_gos_uslugi(vin):
     driver.find_element_by_xpath("//button[@class='button font-']").click()
     time.sleep(3)
     html = driver.page_source
-
-    # with open('index.html', 'w', encoding='utf-8') as f:
-    #     f.write(html)
-    #
-    # with open("index.html", encoding='utf-8') as file:
-    #     html = file.read()
 
     data = []
     soup = BeautifulSoup(html, "lxml")
@@ -264,11 +259,9 @@ def get_info_gos_uslugi(vin):
 
 
 def main():
-    # vin = get_vin()
-    vin = "XW8ZZZ61ZBG015773"
-    # vin = "XW8ZZZ7PZDG007011"
+    vin = get_vin()
     get_info_gos_uslugi(vin)
-    # get_info_gibdd(vin)
+    get_info_gibdd(vin)
 
 
 if __name__ == '__main__':
