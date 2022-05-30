@@ -11,11 +11,12 @@ import config
 
 # Getting a car's VIN by number
 def get_vin():
+    data = []
     number = input("Enter the car number: ")
     time.sleep(3)
 
     driver = webdriver.Chrome(
-        executable_path="path")   # enter the path to the file chromedriver.exe
+        executable_path="C:\\Users\\vovik\\PycharmProjects\\test\\Sel\\ChromeDriver\\chromedriver.exe")   # enter the path to the file chromedriver.exe
 
     driver.get(url='https://vin01.ru/')
     time.sleep(2)
@@ -30,12 +31,17 @@ def get_vin():
     soup = BeautifulSoup(html, "lxml")
 
     vin = soup.find("select", class_="form-control").text
-    return vin
+    data.append({
+        "VIN": vin
+    })
+    # return vin
+    with open('data_vin.json', "w", encoding="utf-8") as file:
+        json.dump(data, file, indent=4, ensure_ascii=False)
 
 
 # getting information about the registration history, traffic accidents and being wanted
 def get_info_gibdd(vin):
-    driver = webdriver.Chrome(executable_path="path")   # enter the path to the file chromedriver.exe
+    driver = webdriver.Chrome(executable_path="C:\\Users\\vovik\\PycharmProjects\\test\\Sel\\ChromeDriver\\chromedriver.exe")   # enter the path to the file chromedriver.exe
 
     driver.get('https://xn--90adear.xn--p1ai/check/auto')  # https://гибдд.рф/check/auto
     time.sleep(30)
@@ -153,7 +159,7 @@ def get_info_gibdd(vin):
 # getting information about Technical data, Number of owners, Being wanted, Availability of restrictions, Being pledged
 def get_info_gos_uslugi(vin):
     driver = webdriver.Chrome(
-        executable_path="path")  # enter the path to the file chromedriver.exe
+        executable_path="C:\\Users\\vovik\\PycharmProjects\\test\\Sel\\ChromeDriver\\chromedriver.exe")  # enter the path to the file chromedriver.exe
 
     driver.get('https://www.gosuslugi.ru/600308/1/form')   # https://www.gosuslugi.ru/
     time.sleep(10)
@@ -259,9 +265,10 @@ def get_info_gos_uslugi(vin):
 
 
 def main():
-    vin = get_vin()
-    get_info_gos_uslugi(vin)
-    get_info_gibdd(vin)
+    get_vin()
+    # vin = get_vin()
+    # get_info_gos_uslugi(vin)
+    # get_info_gibdd(vin)
 
 
 if __name__ == '__main__':

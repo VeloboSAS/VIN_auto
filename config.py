@@ -1,2 +1,4 @@
-login = ""
-password = ""
+login = "89056361569"
+password = "15669832$76"
+# BOT_TOKEN = '1530026817:AAFROExIkCRQk-KOfKbcF4LvqbYDW_cplbY'
+BOT_TOKEN = '1487332696:AAGbW4s6AgBL6xDqhcURB5xagiJfbDZseNM'
