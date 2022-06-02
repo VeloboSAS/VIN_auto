@@ -1,7 +1,6 @@
 import config
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.utils.markdown import hbold, hlink
-# import os
+from aiogram.utils.markdown import hbold
 from aiogram.dispatcher.filters import Text
 import json
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -14,6 +13,7 @@ from main import get_info_gibdd
 
 class DataInput(StatesGroup):
     num = State()
+    vin = State()
 
 
 bot = Bot(config.BOT_TOKEN, parse_mode=types.ParseMode.HTML)
@@ -30,7 +30,7 @@ async def start(message: types.Message):
 
 
 @dp.message_handler(Text(equals="VIN"))
-async def hello(message: types.Message):
+async def send_num(message: types.Message):
     await bot.send_message(message.from_user.id, 'Enter the car number: ')
     await DataInput.num.set()
 
@@ -44,9 +44,14 @@ async def get_vin1(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(Text(equals="Gosuslugi"))
-async def get_discount_sneakers(message: types.Message):
-    await message.answer("Please waiting...")
-    vin = "X9FMXXEEBMCG01011"
+async def send_num(message: types.Message):
+    await bot.send_message(message.from_user.id, 'Enter the vin: ')
+    await DataInput.vin.set()
+
+
+@dp.message_handler(state=DataInput.vin)
+async def get_info_gosuslugi(message: types.Message):
+    vin = message.text
     get_info_gos_uslugi(vin)
 
     with open('data.json', encoding='utf-8') as f:
@@ -85,7 +90,6 @@ async def get_discount_sneakers(message: types.Message):
                    f"{hbold('В розыске')} {item.get('В розыске')}\n" \
                    f"{hbold('Ограничения на регистрацию')} {item.get('Ограничения на регистрацию')}\n" \
                    f"{hbold('В розыске ПТС')} {item.get('В розыске ПТС')}\n"
-                   # f"{hbold('Находится в залоге')} {item.get('Находится в залоге')}\n"
 
             await message.answer(card)
 
