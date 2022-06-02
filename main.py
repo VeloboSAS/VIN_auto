@@ -10,9 +10,7 @@ import config
 
 
 # Getting a car's VIN by number
-def get_vin():
-    data = []
-    number = input("Enter the car number: ")
+def get_vin(number):
     time.sleep(3)
 
     driver = webdriver.Chrome(
@@ -31,12 +29,7 @@ def get_vin():
     soup = BeautifulSoup(html, "lxml")
 
     vin = soup.find("select", class_="form-control").text
-    data.append({
-        "VIN": vin
-    })
-    # return vin
-    with open('data_vin.json', "w", encoding="utf-8") as file:
-        json.dump(data, file, indent=4, ensure_ascii=False)
+    return vin
 
 
 # getting information about the registration history, traffic accidents and being wanted
@@ -222,7 +215,7 @@ def get_info_gos_uslugi(vin):
     search = soup.find_all("div", class_="car-info-group")[3].find_all('div', class_="info-list-value")[0].text.strip()
     limit_reg = soup.find_all("div", class_="car-info-group")[3].find_all('div', class_="info-list-value")[1].text.strip()
     search_pts = soup.find_all("div", class_="car-info-group")[3].find("div", class_="info-list-group-item").find("div", class_="info-list-value").text.strip()
-    zalog = soup.find_all("div", class_="car-info-group")[4].find('div', class_="info-list-value").text.strip()
+    # zalog = soup.find_all("div", class_="car-info-group")[4].find('div', class_="info-list-value").text.strip()
 
     data.append({
         'Номер реестровой записи': number,
@@ -256,8 +249,8 @@ def get_info_gos_uslugi(vin):
         'История регистрационных действий': owner_list,
         'В розыске': search,
         'Ограничения на регистрацию': limit_reg,
-        'В розыске ПТС': search_pts,
-        'Находится в залоге': zalog
+        'В розыске ПТС': search_pts
+        # 'Находится в залоге': zalog
     })
 
     with open('data.json', "w", encoding="utf-8") as file:
@@ -265,9 +258,10 @@ def get_info_gos_uslugi(vin):
 
 
 def main():
-    get_vin()
+    # get_vin()
     # vin = get_vin()
-    # get_info_gos_uslugi(vin)
+    vin = "X9FMXXEEBMCG01011"
+    get_info_gos_uslugi(vin)
     # get_info_gibdd(vin)
 
 
