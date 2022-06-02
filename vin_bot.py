@@ -26,7 +26,7 @@ async def start(message: types.Message):
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
     keyboard.add(*start_buttons)
 
-    await message.answer('Выбери услугу', reply_markup=keyboard)
+    await message.answer('Select options', reply_markup=keyboard)
 
 
 @dp.message_handler(Text(equals="VIN"))
